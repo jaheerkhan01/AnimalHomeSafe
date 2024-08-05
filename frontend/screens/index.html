@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/loginUser.css">
+    <script src="script.js" defer></script>
+    <link rel="icon" href="../resources/images/productLogo.PNG" type="image/x-icon">
+    <link rel="icon" href="../resources/images/productLogo.PNG" type="image/x-icon">
+    <title>Login Page</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="login-section">
+            <h1>Login</h1>
+            <form id="loginForm">
+                <input id="email" type="email" placeholder="Enter your Email" required>
+                <input id="password" type="password" placeholder="Password" required>
+                <div class="button-group">
+                    <button type="submit" class="btn primary">Login</button>
+                    <button type="button" class="btn secondary" onclick="location.href='signUpUser.html'">New User?</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="image-section">
+            <img src="../resources/images/loginPageDisplayImage.jpg" alt="animal picture">
+            <p>"Animals are nature's reminder of love's purest form."</p>
+        </div>
+    </div>
+</body>
+
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+
+    loginForm.addEventListener('submit', async function(event) {
+        event.preventDefault();  // Prevent the default form submission
+
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+
+        var payload = {
+            email: email,
+            password: password
+        };
+
+        try {
+            const response = await fetch('http://localhost:3000/routes/authentication/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+            const message = data.status;
+            if(message == 'Logged in successfully'){
+                alert("Logged in successfully");
+                window.location.href = 'main.html';
+            }else{
+                alert(message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+});
+
+</script>
+</html>

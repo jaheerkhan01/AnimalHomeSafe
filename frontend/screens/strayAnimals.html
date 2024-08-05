@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap">
+        <link rel="stylesheet" href="../css/strayAnimals.css">
+        <link rel="icon" href="../resources/images/productLogo.PNG" type="image/x-icon">
+</head>
+<body>
+    <div class="navbar">
+        <a href="main.html"><i class="fas fa-home"></i> Gentle Guardian</a>
+        <a href="strayAnimals.html" class="active"><i class="fas fa-cat"></i> Help Stray Animals</a>
+        <a href="aboutUs.html"><i class="fas fa-info-circle"></i> About Us</a>
+        <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
+        <a href="index.html" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Card for Nearby Clinics -->
+    <div class="additional-card-container">
+        <div class="additional-card">
+            <img src="../resources/images/clinic1.jpg" alt="Clinic Image">
+            <p>Find nearby clinics to get immediate  help</p>
+            &nbsp;
+            <button id="nearbyClinicsButton">Find Nearby Clinics</button>
+        </div>
+    
+        <!-- Card for Nearby Adoption Centers -->
+        <div class="additional-card">
+            <img src="../resources/images/adoptMe.jpeg" alt="Adoption Center Image">
+            <p>Find them a nearby adoption centres</p>
+            &nbsp;
+            <button id="adoption">Find Adoption Centers</button>
+        </div>
+
+        <div class="additional-card">
+            <img src="https://images.unsplash.com/photo-1615840287214-7ff58936c4cf?auto=format&fit=crop&q=60&w=500&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Y29udGFjdCUyMHVzfGVufDB8fDB8fHww" alt="Contact Details Image">
+            <p>Reach Out for Urgent Care</p>
+            <ul>
+                <li>+91 345210494</li>
+                <li>+91 234560912</li>
+                <li>helpFauna@gentleGuardians</li>
+                <!-- Add more -->
+            </ul>
+        </div>
+    </div>
+    
+    <div class="search">
+        <input type="text" id="searchInput"  placeholder="Enter the type of stray animal who needs help.....  ">
+        <button id="searchButton">Search</button>
+    </div>
+    <div id="text" hidden style="margin-left: 15px;"><h2>Guidelines for Stray Animal</h2></div>
+    <div id="guidelines-section">
+        <div id="text" ><h3></h3> </div>
+    </div>
+    
+    
+</body>
+<script>
+// Renders guidlines in a card view form based on search results
+function renderGuidelines() {
+    const guidelinesSection = document.getElementById("guidelines-section");
+    guidelinesSection.innerHTML = '';
+    const searchTerm = document.getElementById("searchInput").value;
+    
+    if(searchTerm == null || searchTerm.length == 0) {
+        console.log("No search term");
+    } else {
+        fetch(`http://localhost:3000/routes/animal/strayAnimals?strayAnimals=`+searchTerm)
+        .then(response => response.json())
+        .then(data => {
+            const guidelinesData = data[0].Guidelines; // Access the Guidelines key here
+            var a = 1;
+            document.getElementById("text").hidden = false;
+            guidelinesData.forEach(guideline => {
+                const guidelineCard = document.createElement("div");
+                guidelineCard.classList.add("guideline-card");
+      
+                const guidelineTitle = document.createElement("div");
+                guidelineTitle.classList.add("guideline-title");
+                guidelineTitle.textContent = "#"+a+" "+guideline.title;
+                a++;
+      
+                const guidelineContent = document.createElement("div");
+                guidelineContent.classList.add("guideline-content");
+                guidelineContent.textContent = guideline.content;
+      
+                guidelineCard.appendChild(guidelineTitle);
+                guidelineCard.appendChild(guidelineContent);
+                guidelinesSection.appendChild(guidelineCard);
+            });
+            additionalCards.style.display = "block";  
+        })
+        .catch(error => {
+            console.error('Error fetching clinic data:', error);
+        });
+
+        
+    }
+}
+
+
+// Attach the click event listener to the search button
+document.getElementById("searchButton").addEventListener("click", renderGuidelines);
+document.getElementById("nearbyClinicsButton").addEventListener("click", function() {
+            window.location.href = 'findNearestClinic.html'; // Navigate to a new HTML page for Nearby Clinics
+});
+
+document.getElementById("adoption").addEventListener("click", function() {
+    window.location.href = 'adoptionPet.html'; // Navigate to a new HTML page for Nearby Adoption Centres
+});
+</script>
+</html>

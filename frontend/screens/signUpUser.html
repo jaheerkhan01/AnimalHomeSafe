@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/signUpUser.css">
+  <link rel="icon" href="../resources/images/productLogo.PNG" type="image/x-icon">
+  <title>Gentle Guardians - Sign Up</title>
+</head>
+<body>
+  <div class="container" style="width: 50%;">
+    <center><h1>Welcome to Gentle Guardians</h1></center>
+    <p>We're excited to have you join our community. Please fill in the details below to create your account.</p>
+    <form id="signupForm">
+      <!-- User Details -->
+      <input type="text" id="name" placeholder="Full Name" required>
+      <input id="email" type="email" placeholder="Email" required>
+      <input id="password" type="password" placeholder="Password" required>
+      <input type="tel" id="contact" placeholder="Contact No." required>
+      <button id="submitButton" type="submit" class="btn primary">Sign Up</button>
+      <button type="button" class="btn secondary" onclick="location.href='index.html'">Log In</button>
+    </form>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const submitButton = document.getElementById("submitButton");
+
+      submitButton.addEventListener("click",  async function(event) {
+        event.preventDefault();
+
+        const email = document.getElementById("email");
+        const password = document.getElementById("password");
+        const name = document.getElementById("name");
+        const contact = document.getElementById("contact");
+
+        if (!email.value.endsWith("@gmail.com")) {
+          alert("Email should end with '@gmail.com'");
+          return;
+        }
+
+        if (password.value.length < 8) {
+          alert("Password should be at least 8 characters long.");
+          return;
+        }
+
+        var payload = {
+            email: email.value,
+            password: password.value,
+            name : name.value,
+            contact : contact.value
+        };
+
+        try {
+            const response = await fetch('http://localhost:3000/routes/authentication/signUp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+            const message = data.status;
+            if(message == 'Account created successfully'){
+                alert("Account created successfully");
+                window.location.href = 'index.html';
+            }else{
+                alert(message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

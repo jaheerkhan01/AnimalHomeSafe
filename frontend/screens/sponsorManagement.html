@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Nearest Retail Shop</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/sponsorManagement.css"> 
+    <link rel="icon" href="../resources/images/productLogo.PNG" type="image/x-icon">
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="main.html"><i class="fas fa-home"></i> Gentle Guardian</a>
+        <a href="#" class="active"><i class="fas fa-food"></i> Sponsor an Animal Place</a>
+        <a href="aboutUs.html"><i class="fas fa-info-circle"></i> About Us</a>
+        <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
+        <a href="index.html" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    
+    <center><div class="top">Our Top Donors who believe in quality animal life</div></center>
+    <div class="top-sponsors">
+        <!-- Card Would Appear Dynamically  -->
+      </div>
+
+
+    <div class="search">
+        <input type="text" id="searchInput" placeholder="Search for widlife sanctuary or zoo...">
+        <select class="search-filter" id="searchFilter">
+            <option value="city">City</option>
+            <option value="state">State</option>
+            <option value="placeName">Place Name</option>
+        </select>
+        <button id="searchButton">Search</button>
+    </div>
+
+    <!-- Place Display Section -->
+    <div id="placeDisplay">
+        <!-- Dynamically added by JavaScript -->
+    </div>
+
+    <!-- Popup structure -->
+    <div class="overlay" onclick="closePopup()"></div>
+    <div class="popup" style="display: none;">
+        <img id="popup-image" src="#" alt="Clinic Image" width="200" height="200">
+        <div class="popup-details">
+            <h2 id="popup-title">Place Name</h2>
+            <h3 id="popup-type">Place Type</h3>
+            <p id="popup-content">Place Details</p>
+        </div>
+        <button onclick="closePopup()">Close</button>
+    </div>
+    <!-- Popup structure -->
+   <div id="productPopup" class="product-popup">
+       <div class="product-popup-content">
+           <span class="close-btn"></span>
+           <button class="popup-button" onclick="closeProductPopup()">Close</button>
+       </div>
+   </div>
+
+
+<script>
+
+    var AnimalPlaces = [];
+    const zoo = "../resources/images/zoo.jpg"
+    const nationalPark = "../resources/images/nationalPark.jpg"
+    function checkLastNameEndsWithVowel(fullName) {
+        const firstName = fullName.split(' ')[0];
+        const lastLetter = firstName.slice(-1).toLowerCase();
+        const vowels = 'aeiou';
+        return vowels.includes(lastLetter);
+    }
+
+    // Fetching top 5 sponsors 
+    fetch('http://localhost:3000/routes/customer/topFIveSponsors')
+    .then(response => response.json())
+    .then(data => {
+        const container = document.querySelector('.top-sponsors');
+        let html = '';
+
+        data.forEach(sponsor => {
+        if(checkLastNameEndsWithVowel(sponsor.name)){
+            html += `
+            <div class="sponsor-card">
+            <img src="../resources/images/sponsor2.jpg" alt="Sponsor Image">
+            <span>${sponsor.name}</span>
+            <span>₹${sponsor.sponsor_amount}</span>
+            <span>${sponsor.email}</span>
+            </div>`;
+        }else{
+            html += `
+            <div class="sponsor-card">
+            <img src="../resources/images/sponsor1.png" alt="Sponsor Image">
+            <span>${sponsor.name}</span>
+            <span>₹${sponsor.sponsor_amount}</span>
+            <span>${sponsor.email}</span>
+            </div>
+        `;
+        }
+        
+        });
+
+        container.innerHTML = html;
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+    });
+
+    // Display Random but genuine data 
+    fetch(`http://localhost:3000/routes/animalPlace/`)
+        .then(response => response.json())
+        .then(data => {
+        AnimalPlaces = data;
+        renderAnimalPlaces(AnimalPlaces);
+    });
+
+
+        document.getElementById('searchButton').addEventListener('click', searchAnimalPlaces);
+        
+        function searchAnimalPlaces() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const searchFilter = document.getElementById('searchFilter').value;
+            var endPoints = `${searchFilter}?${searchFilter}=${searchTerm}`;
+            if(searchTerm.trim()==='') endPoints = ``;
+            // Make an API call using the searchTerm and searchFilter
+            fetch(`http://localhost:3000/routes/animalPlace/`+endPoints)
+            .then(response => response.json())
+            .then(data => {
+            AnimalPlaces = data;
+            renderAnimalPlaces(AnimalPlaces);
+            })
+            .catch(error => {
+            console.error('Error fetching clinic data:', error);
+            });
+        }
+        
+         function renderAnimalPlaces(AnimalPlacePlacender) {
+         const placeContainer = document.getElementById('placeDisplay');
+         placeContainer.innerHTML = '';
+
+         for (const place of AnimalPlacePlacender) {
+         // Create the Place card container
+         const placeCard = document.createElement('div');
+         placeCard.className = 'place-card';
+
+         // Create and append image to the Place card
+         const img = document.createElement('img');
+         img.src = place.type_of_place=="national park"? nationalPark : zoo;
+         img.alt = place.name;
+         placeCard.appendChild(img);
+
+         // Create and append the Place description container
+         const placeDescription = document.createElement('div');
+         placeDescription.className = 'place-description';
+         placeCard.appendChild(placeDescription);
+
+         // Create and append h3 tag for Place name
+         const h3 = document.createElement('h3');
+         h3.textContent = place.name;
+         placeDescription.appendChild(h3);
+
+         // Create and append p tag for contact number
+         const p = document.createElement('p');
+         p.textContent = place.street_name;
+         placeDescription.appendChild(p);
+
+         var city_state = place.city;
+         city_state += ", ";
+         city_state += place.state;
+         // Create and append p tag for contact number
+         const p2 = document.createElement('p');
+         p2.textContent = city_state;
+         placeDescription.appendChild(p2);
+
+         // Create and append the View Details button
+         const detailsBtn = document.createElement('button');
+         detailsBtn.textContent = 'View Details';
+         detailsBtn.className = 'sponsor-btn';
+         detailsBtn.onclick = function () {
+         showPopUp(place);
+         };
+         placeCard.appendChild(detailsBtn);
+
+
+         const productBtn = document.createElement('button');
+         productBtn.textContent = 'Sponsor';
+         productBtn.className = 'sponsor-btn';
+
+         productBtn.onclick = function () {
+            showSponsorDetailsPopUp(city_state, place );
+         };
+         
+         placeCard.appendChild(productBtn);
+
+         // Append the Place card to the main container
+         placeContainer.appendChild(placeCard);
+         }
+         }
+
+
+        document.querySelector(".popup-button").addEventListener("click", function() {
+            document.getElementById("productPopup").style.display = "none";
+        });
+
+        function showSponsorDetailsPopUp(city_state, place) {
+            const popUpContainer = document.createElement("div");
+            popUpContainer.className = "myText";
+
+            const qrImage = document.createElement("img");
+            qrImage.src = "../resources/images/qr_code.jpg"; 
+            qrImage.alt = "QR Code";
+            popUpContainer.appendChild(qrImage);
+
+            // Add Zoo details
+            const zooDetails = document.createElement("p");
+            zooDetails.id = "zooDetails";
+            zooDetails.innerHTML = `${place.name} <br> ${city_state}`;
+            popUpContainer.appendChild(zooDetails);
+
+            // Create an input field for the amount
+            const amountInput = document.createElement("input");
+            amountInput.className = "myTextField";
+            amountInput.type = "number";
+            amountInput.placeholder = "Enter amount to sponsor";
+            popUpContainer.appendChild(amountInput);
+
+            // Create submit button
+            const submitButton = document.createElement("button");
+            submitButton.className = "myButton";
+            submitButton.innerHTML = "Proceed for Payment";
+            popUpContainer.appendChild(submitButton);
+            submitButton.addEventListener("click", function(){
+                if(amountInput.value) {
+                    makePayment(amountInput.value);
+                    alert(`Sponsored amount: ${amountInput.value}`);
+                }
+                popUpContainer.style.display = "none";
+
+            })
+
+            // Append the pop-up container to the document body
+            document.body.appendChild(popUpContainer);
+        }
+
+        async function makePayment(amount) {
+            var session_data = await getSessionDetails();
+            console.log(session_data+123222);
+            if(!session_data){
+                alert("Please Try Again");
+                return;
+            }
+            var payload = {
+                'email' : session_data,
+                'amount' : amount
+            }
+            try {
+                const response = await fetch('http://localhost:3000/routes/customer/completeTransaction', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                const message = data.status;
+                if(data.message){
+                    alert(data.message);
+                    window.location.href = 'sponsorManagement.html';
+                } else {
+                    alert(message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+            
+        }
+
+    function getSessionDetails() {
+        return fetch(`http://localhost:3000/routes/authentication/userCredentials/`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            return data.email;
+        })
+        .catch(error => {
+            console.error('Error fetching session data:', error);
+            throw error; // Rethrow the error to propagate it if needed.
+        });
+    }
+
+
+
+        
+        function filterPlace() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filteredClinic = clinic.filter(Place =>
+                Place.name.toLowerCase().includes(searchTerm) ||
+                Place.state.toLowerCase().includes(searchTerm) ||
+                Place.city .toLowerCase().includes(searchTerm)
+            );
+            renderZoos(filteredPlace);
+        }
+
+        function showPopUp(place) {
+            const img_url = place.type_of_place=="national park"? nationalPark : zoo
+            document.getElementById("popup-title").innerText = place.name;
+            document.getElementById("popup-type").innerText = place.type_of_place;
+            document.getElementById("popup-content").innerText = `${place.street_name}\n${place.city}, ${place.state}\nPincode: ${place.pincode}`;
+            document.getElementById("popup-image").src = img_url;
+            document.querySelector(".overlay").style.display = "block";
+            document.querySelector(".popup").style.display = "flex";
+        }
+        
+
+        function closePopup() {
+            document.querySelector(".overlay").style.display = "none";
+            document.querySelector(".popup").style.display = "none";
+        }
+
+        // Render initial AnimalPlaces on page load
+        renderAnimalPlaces(AnimalPlaces);
+    </script>
+</body>
+
+</html>

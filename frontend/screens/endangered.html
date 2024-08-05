@@ -1,0 +1,170 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endangered Animal Control</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/endangered.css">
+    <link rel="icon" href="../resources/images/productLogo.PNG" type="image/x-icon">
+</head>
+
+
+<body>
+    <div class="header">
+        <span><h1 style="font-family: 'Poppins', Arial, sans-serif;">Endangered Animal Protection</h1></span>
+    </div>
+    <div class="navbar">
+        <a href="main.html"><i class="fas fa-home"></i> Gentle Guardian</a>
+        <a href="#" class="active"><i class="fas fa-exclamation-triangle"></i> Endangered Animal Protection</a>
+        <a href="aboutUs.html" target="_blank"><i class="fas fa-paw"></i> About us</a>
+        <a href="contact.html" target="_blank"><i class="fas fa-phone"></i> Contact us</a>
+        <a href="index.html" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+    &nbsp;
+
+    <!-- Endangered Animals in Card View -->
+    <div id="endangered-animals-container" class="endangered-animals">
+        <!-- Dynamically added by JavaScript -->
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const organizations = [
+        {
+            name: "WWF",
+            description: "The WWF is the world’s leading animal conservation charity. One of the best known organizations that helps endangered species, WWF definitely deserves a place in our list. This globally known organization has been fighting for wildlife conservation since 1961. Their mission is to create a world where nature and humans can thrive together. As a result, they have made a huge impact on endangered species on the planet and are constantly developing policies and programs to impact global habitats and wildlife positively. Their high-profile global campaigns, including adopting animals and Earth Hour, seek to protect endangered animals on land, in rivers, and in oceans, including elephants, tigers, lions, marine turtles, rhinos, chimpanzees, dolphins, whales, and gorillas.",
+            website: "https://www.worldwildlife.org/"
+        },
+        {
+            name: "International Rhino Foundation",
+            description: "A vital charity that helps rhinos across the globe, the International Rhino Foundation is focused on the conservation of the five species of rhino: the White Rhinoceros and Black Rhinoceros in Africa; the Indian Rhinoceros, Javan Rhinoceros, and Sumatran Rhinoceros in Asia. They have been helping rhinos for over 25 years to ensure the survival of rhinos against the devastating impacts of illegal poaching and their natural habitat destruction. They have a great track record of supporting and developing viable rhino populations and are one of the essential organizations that help endangered species across the world.",
+            website: "https://www.rhinos.org/"
+        },
+        {
+            name: "The Nature Conservancy",
+            description: "Since 1951, The Nature Conservancy has been dedicated to protecting nature for people today and for future generations. One of the top wildlife conservation organizations, The Nature Conservancy actively conserves over 100 million acres of land and waters across the globe on which all species and life depend. Their aim is to use science and collaboration with local communities, businesses, and individuals to encourage and protect vital biodiversity. They work with over 600 scientists in 69 countries across the world, including Panama, Peru, Kenya, and Tanzania, promoting and protecting the biodiversity of our wildlife communities - essential to the health of the planet.",
+            website: "https://www.nature.org/"
+        },
+        {
+            name: "Wildlife Alliance",
+            description: "The Wildlife Alliance is a must on any list of endangered animal charities. Their mission is to completely eradicate wildlife extinction. To achieve this, they work to develop alternative sources of income in often developing communities and are currently working in Cambodia. They have completed successful programs across the globe, including in Thailand, Myanmar, India, Ecuador, and Russia. Wildlife Alliance also rescues wildlife such as Asian elephants, tigers, gibbons, and otters from illegal trading, releasing them after rehabilitation and helping these populations to thrive.",
+            website: "https://www.wildlifealliance.org/"
+        },
+        {
+            name: "World Society for the Protection of Animals",
+            description: "The World Society for the Protection of Animals is an important organization that helps endangered animals across the world. The key belief of the charity is that animals deserve to be treated with respect and compassion, and they work to inspire people to treat animals better. Their campaigns include ending bear dancing in India, influencing global UN policy on endangered wildlife, and they are currently campaigning for a universal declaration to end all animal suffering. Whales, bears, tigers, and bulls are some of the animals this charity for endangered animals has helped.",
+            website: "https://www.worldanimalprotection.org/"
+        },
+        {
+            name: "International Fund for Animal Welfare (IFAW)",
+            description: "The International Fund for Animal Welfare is one of the biggest charities that help endangered animals. IFAW works across the globe to save and rescue individual animals, reduce human-wildlife conflict, and preserve essential and important wildlife habitats. They’re also dedicated to protecting endangered animal populations as a whole, such as tigers, lions, and seals. IFAW is truly one of the best organizations that help endangered animals – they’re also dedicated to landscape conservation, political advocacy, marine conservation, and research and education about the importance of protecting the amazing, yet sadly endangered animal species.",
+            website: "https://www.ifaw.org/"
+        },
+        {
+            name: "Performing Animal Welfare Society",
+            description: "The Performing Animal Welfare Society is leading the effort to rescue animals that have been the victim of exotic and performing animal trades across the world. Performing animals often experience confinement and abuse. The types of animals PAWS supports include elephants, monkeys, tigers, and lions. The charity was started in 1984 by an animal trainer, and PAWS Sanctuaries now take in rescued and rehabilitated ex-performing animals so they can live peacefully and happily in natural habitats, free from chains and confinement. PAWS ARK 2000 is a 2,300-acre site in San Andreas, California, and is currently home to African and Asian elephants, tigers, bears, African lions, and a black leopard.",
+            website: "https://www.pawsweb.org/"
+        },
+        {
+            name: "Panthera",
+            description: "One of the top wildlife conservation organizations, Panthera is dedicated to conserving the world’s 36 species of wild cats. These stunning species include majestic lions, jaguars, snow leopards, pumas, and cheetahs. As a leading conservation charity, Panthera works across the globe with a variety of local and international scientists, NGOs, and government agencies to develop and implement a variety of programs to help these threatened beautiful wild cats. These projects include their Tigers Forever program across six tiger range countries, including Bangladesh, India, Indonesia, Malaysia, Nepal, and Thailand, and also Project Pardus, supporting the leopard across tropical Asia and the Middle East.",
+            website: "https://www.panthera.org/"
+        },
+        {
+            name: "Oceana",
+            description: "Oceana is the largest charity for endangered species devoted exclusively to the world’s oceans and the amazing variety of life contained within the ocean. They work to shield fish, marine mammals, and other aquatic life from the devastating effects of human pollution, environmental damage, and overfishing. Their campaigns work to develop responsible fishing, to restore the oceans to enable them to thrive as well as initiatives and expeditions to protect sea life including sharks, octopus, jellyfish, coral, and sea turtles.",
+            website: "https://oceana.org/"
+        },
+        {
+            name: "Born Free",
+            description: "Born Free is a leader within endangered animal charities across the world. Their mission is to keep ‘wildlife in the wild’ and to end the suffering of wild animals in captivity, treat all animals with compassion and positivity, and to protect endangered species in their natural habitats. They also work to counter the effects of an ever-expanding human population, including trying to halt the extinction of wildlife species. They are key campaigners across the world and share their campaigns and conservation messages through education and collaboration with local communities. Through these important global projects, they work to protect numerous species including lions, elephants, gorillas, chimpanzees, tigers, polar bears, wolves, dolphins, and sharks.",
+            website: "https://www.bornfree.org.uk/"
+        },
+        {
+            name: "Rainforest Alliance",
+            description: "According to the Rainforest Alliance, all rainforests on the planet may be gone in 100 years. In addition to this, 123,000 acres of rainforest are lost daily across the globe, destroying beautiful and lush rainforest habitats. This destruction destroys and damages wildlife and causes the loss of thousands of animal species every year who rely on rainforests to survive. The Rainforest Alliance works to change these shocking statistics by conserving biodiversity and ensuring sustainable livelihoods by transforming land-use and business practices, as well as consumer behavior. They work throughout the world in areas such as the Amazonian rainforest in Peru, Ecuador, Mexico, and rainforests in the Congo.",
+            website: "https://www.rainforest-alliance.org/"
+        },
+        {
+            name: "International Anti-Poaching Foundation",
+            description: "The IAPF is a key organization within our list of the top endangered animal charities across the world. Wildlife crime is at epidemic levels and threatens the extinction of rhinos, elephants, and giraffes. Their mission is to halt this threat, specializing in tackling the effects of illegal poaching. Their structured approach provides essential trained anti-poaching rangers to monitor poachers and protect wildlife from this ever-increasing threat of illegal poaching in Mozambique, Zimbabwe, and South Africa. The IAPF works with partners through community engagement and development, biodiversity management, and wildlife rescue. If these animals can be protected, then entire ecosystems across the globe will also be protected for the future.",
+            website: "https://www.iapf.org/"
+        },
+        {
+            name: "Tusk Trust",
+            description: "The Tusk Trust has over twenty years of experience in wildlife conservation and development. They fund conservation, community education, and environmental programs across Africa and are supported by HRH Prince of Cambridge. Since 1990 they have invested over £30 million into wildlife conservation projects and Tusk currently supports more than 60 field projects in 19 African countries. These projects not only work to protect wildlife but also work to help communities who live alongside wildlife, creating a sustainable harmony with humans and nature. They have supported over 36 species and are truly one of the top charities that help endangered species.",
+            website: "https://www.tusk.org/"
+        },
+        {
+            name: "Jane Goodall Institute",
+            description: "Dr. Jane Goodall has transformed the world of endangered animal conservation. The Jane Goodall Institute is one of the most well-known charities who protect endangered animals, working to protect wild chimpanzees from extinction in Africa. The charity campaigns for sustainable protection of endangered species through environmental conservation, development, and education. The number of wild chimpanzees in Africa has fallen to 340,000 from a population of millions, and so the Jane Goodall Institute is currently dedicated to programs in countries such as Mali, Tanzania, and Senegal, working tirelessly to protect the numbers of wild chimpanzees for the future.",
+            website: "https://www.janegoodall.org/"
+        },
+        {
+            name: "The Pew Charitable Trusts",
+            description: "Most penguin species across the world are in decline. This population decline is due to a variety of issues such as climate change, habitat degradation, oil pollution, and depletion of their food sources through overfishing. Pew’s important global penguin conservation project aims to reverse the decline in penguin species. Pew is working tirelessly to establish marine reserves in Antarctica’s Southern Ocean and to restore and protect important breeding and feeding grounds for Penguins in waters across the Southern Hemisphere.",
+            website: "https://www.pewtrusts.org/"
+        },
+        {
+            name: "Environmental Investigation Agency",
+            description: "The Environmental Investigation Agency is one of the major organizations that help endangered animals. Environmental crime such as illegal poaching, habitat destruction, and illegal trading of animals for medicines, home décor, and meat all threaten the delicate ecosystems of nature and the animal species that inhabit these areas. The EIA works to prevent environmental crime and to develop programs in communities that can lead to positive change and protection of endangered species such as whales, Bluefin tuna, and leopards.",
+            website: "https://www.eia-global.org/"
+        },
+        {
+            name: "IUCN",
+            description: "Created in 1948, The International Union for Conservation of Nature (IUCN) is a membership union composed of both government and civil society organizations. It is the largest organization that helps endangered species in the world, including sea turtles, whales, polar bears, and lions. Through various policies including education and communication, they provide knowledge and tools to allow economic development and environmental conservation to take place together.",
+            website: "https://www.iucn.org/"
+        },
+        {
+            name: "Wildlife Conservation Society",
+            description: "The Wildlife Conservation Society believes wildlife is worth fighting for, and they’re dedicated to protecting wildlife across the planet. Their mission focuses on combining science, conservation, and education to create real and lasting change to wildlife. Some of the species they work with include big cats, bears, and apes, creating programs to combat climate change and habitat destruction.",
+            website: "https://www.wcs.org/"
+        },
+    ];
+   
+
+
+    
+    const organizationsContainer = document.getElementById('endangered-animals-container');
+
+
+    organizations.forEach((org) => {
+        const orgCard = document.createElement('div');
+        orgCard.classList.add('organization-card');
+
+
+        const name = document.createElement('h2');
+        name.textContent = org.name;
+
+
+        const description = document.createElement('p');
+        description.textContent = org.description;
+
+
+        const websiteLink = document.createElement('a');
+        websiteLink.href = org.website;
+        websiteLink.target = '_blank';
+        websiteLink.textContent = 'Know More';
+
+
+        orgCard.appendChild(name);
+        orgCard.appendChild(description);
+        orgCard.appendChild(websiteLink);
+
+
+        organizationsContainer.appendChild(orgCard);
+    });
+});
+
+    </script>
+</body>
+
+
+</html>

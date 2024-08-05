@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Gentle Guardians</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/contact.css">
+    <link rel="icon" href="../resources/images/productLogo.PNG" type="image/x-icon">
+</head>
+
+<body>
+    <div class="header">
+        <h1 style="font-family: 'Poppins', Arial, sans-serif;">Welcome to Gentle Guardians</h1>
+    </div>
+    <div class="navbar">
+        <a href="main.html"><i class="fas fa-home"></i> Gentle Guardians</a>
+        <a href="aboutUs.html"><i class="fas fa-info-circle"></i> About Us</a>
+        <a href="contact.html" class="active"><i class="fas fa-envelope"></i> Contact</a>
+        <a href="index.html" class="logout"><i class="fas fa-sign-in"></i> &nbsp; LOGIN</a>
+    </div>
+
+    <div class="contact-intro">
+        <h1>Contact Us &nbsp;<i class="fas fa-phone"></i></h1>
+        <p>Have a query, facing a problem, interested in collaborating, or wish to be part of our events? We're here to help! Reach out to us, and together, let's make the world a better place for animals.</p>
+    </div>
+
+    
+        <div class="contact-form">
+            <h2>Reach Out to Us</h2>
+            <form action="YOUR_SERVER_ENDPOINT" method="POST">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+        
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+
+                <div class="form-group">
+                    <label for="Description">Description:</label>
+                    <input type="text" id="Description" name="Description">
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit">SUBMIT</button>
+                </div>
+            </form>
+        </div>
+        
+          
+
+    <div class="social-links">
+        <h2>Connect with us on Social Media</h2>
+        <a href="#" target="_blank"><i class="fab fa-facebook-f"></i> Facebook</a>
+        <a href="#" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>
+        <a href="#" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+        <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+    </div>
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector("form");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const description = document.getElementById("Description").value; // Note: The 'id' should be 'Description' to match the HTML
+    
+    const payload = {
+      name,
+      email,
+      phone,
+      description,
+    };
+    
+    try {
+      const response = await fetch("http://localhost:3000/routes/customer/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      
+      if (response.ok) {
+        alert("Contact Sent Successfully!");
+      } else {
+        console.error("Failed to submit form");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  });
+});
+
+</script>
+
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopt a Pet</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/adoptionPet.css">
+    <link rel="icon" href="../resources/images/productLogo.PNG" type="image/x-icon">
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="main.html"><i class="fas fa-home"></i> Gentle Guardian</a>
+        <a href="AnimalWellBeing_screen.html"><i class="fas fa-info-circle"></i> Animal Well-Being</a>
+        <a href="#" class="active"><i class="fas fa-store"></i> Adopt a Pet</a>
+        <a href="index.html" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <div class="search">
+        <input type="text" id="searchInput" placeholder="Search...">
+        <select class="search-filter" id="searchFilter">
+            <option value="adoption_center_name">Adoption Center Name</option>
+            <option value="city">City</option>
+            <option value="state">State</option>
+            <option value="common_name">Common Name</option>
+        </select>
+        <button id="searchButton">Search</button>
+    </div>
+
+    <!-- Store Display Section -->
+    <div id="centerDisplay">
+        <!-- Dynamically added by JavaScript -->
+    </div>
+
+    <!-- Popup structure -->
+    <div class="overlay" onclick="closePopup()"></div>
+    <div class="popup" style="display: none;">
+        <img id="popup-image" src="#" alt="Center Image" width="200" height="200">
+        <div class="popup-details">
+            <h2 id="popup-title">Center Name</h2>
+            <p id="popup-content">Center Details</p>
+        </div>
+        <button onclick="closePopup()">Close</button>
+    </div>
+    <!-- Popup structure -->
+    <div id="animalPopup" class="animal-popup" style="overflow-y: auto;">
+        <div class="animal-popup-content">
+            <span class="close-btn"></span>
+            <h2>Animals</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Common Name</th>
+                        <th>Breed</th>
+                        <th>Size</th>
+                        <th>Count</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody id="animalTableBody">
+                    <!-- Rows will be added here dynamically using JavaScript -->
+                </tbody>
+            </table>
+            <button class="popup-button" onclick="closeProductPopup()">Close</button>
+        </div>
+    </div>
+
+
+    <script>
+        document.getElementById('searchButton').addEventListener('click', searchAdoptionCenters);
+        function searchAdoptionCenters() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const searchFilter = document.getElementById('searchFilter').value;
+            var endPoints = `${searchFilter}?${searchFilter}=${searchTerm}`;
+            console.log(endPoints);
+            if (searchTerm.trim() === '') endPoints = ``;
+            // Make an API call using the searchTerm and searchFilter
+            fetch(`http://localhost:3000/routes/adoption_center/` + endPoints)
+                .then(response => response.json())
+                .then(data => {
+                    AdoptionCenters = data;
+                    renderAdoptionCenters(AdoptionCenters);
+                })
+                .catch(error => {
+                    console.error('Error fetching Adoption Centers data:', error);
+                });
+        }
+
+        var AdoptionCenters = [
+            {
+                id: 1,
+                name: "Happy Paws",
+                street_name: "MG Road",
+                city: "Bangalore",
+                state: "Karnataka",
+                pincode: 560001,
+                contact_number: "+91 98765 43210"
+            },
+            {
+                id: 2,
+                name: "Animal Haven",
+                street_name: "Malleswaram",
+                city: "Bangalore",
+                state: "Karnataka",
+                pincode: 560003,
+                contact_number: "+91 87654 32109"
+            },
+            {
+                id: 3,
+                name: "Furry Friends",
+                street_name: "Tiger Path",
+                city: "Kozhikode",
+                state: "Kerala",
+                pincode: 673596,
+                contact_number: "+91 76543 21098"
+            },
+            {
+                id: 4,
+                name: "Paw Paradise",
+                street_name: "C.G. Road",
+                city: "Ahmedabad",
+                state: "Gujarat",
+                pincode: 380006,
+                contact_number: "+91 65432 10987"
+            }
+        ];
+
+        function renderAdoptionCenters(adoptionCentersToRender) {
+            const adoptionCentersContainer = document.getElementById('centerDisplay');
+            adoptionCentersContainer.innerHTML = '';
+
+            for (const adoptionCenter of adoptionCentersToRender) {
+                // Create the store card container
+                const adoptionCentersCard = document.createElement('div');
+                adoptionCentersCard.className = 'adoption-card';
+
+                // Create and append image to the store card
+                const img = document.createElement('img');
+                img.src = '../resources/images/store1.jpg';
+                img.alt = adoptionCenter.name;
+                adoptionCentersCard.appendChild(img);
+
+                // Create and append the store description container
+                const adoptionCentersDescription = document.createElement('div');
+                adoptionCentersDescription.className = 'adoption-description';
+                adoptionCentersCard.appendChild(adoptionCentersDescription);
+
+                // Create and append h3 tag for store name
+                const h3 = document.createElement('h3');
+                h3.textContent = adoptionCenter.name;
+                adoptionCentersDescription.appendChild(h3);
+
+                // Create and append p tag for contact number
+                const p = document.createElement('p');
+                p.textContent = adoptionCenter.contact_number;
+                adoptionCentersDescription.appendChild(p);
+
+                var city_state = adoptionCenter.city;
+                city_state += ", ";
+                city_state += adoptionCenter.state;
+                // Create and append p tag for contact number
+                const p2 = document.createElement('p');
+                p2.textContent = city_state;
+                adoptionCentersDescription.appendChild(p2);
+
+                // Create and append the View Details button
+                const detailsBtn = document.createElement('button');
+                detailsBtn.textContent = 'View Details';
+                detailsBtn.className = 'sponsor-btn';
+                detailsBtn.onclick = function () {
+                    showPopUp(adoptionCenter.name, adoptionCenter.street_name+", "+adoptionCenter.city+", "+adoptionCenter.state+"-"+adoptionCenter.pincode, adoptionCenter.contact_number,'../resources/images/store1.jpg');
+                };
+                adoptionCentersCard.appendChild(detailsBtn);
+
+
+                const animalBtn = document.createElement('button');
+                animalBtn.textContent = 'View Animals';
+                animalBtn.className = 'sponsor-btn';
+                animalBtn.onclick = function () {
+                    showAnimals(adoptionCenter.id)
+                };
+                adoptionCentersCard.appendChild(animalBtn);
+
+                // Append the store card to the main container
+                adoptionCentersContainer.appendChild(adoptionCentersCard);
+            }
+        }
+
+        var animals = [];
+
+        function showAnimals(adoptionCenterId) {
+            var endPoints = `adoption_center_id=${adoptionCenterId}`;
+            fetch(`http://localhost:3000/routes/adoption_center/id/animals?` + endPoints)
+                .then(response => response.json())
+                .then(data => {
+                    animals = data;
+                    renderAnimals(animals);
+                })
+                .catch(error => {
+                    console.error('Error fetching animals data:', error);
+                });
+        }
+
+        document.querySelector(".popup-button").addEventListener("click", function () {
+            document.getElementById("animalPopup").style.display = "none";
+        });
+
+        function renderAnimals(animalsList) {
+            console.log("reached here");
+            var tbody = document.getElementById('animalTableBody');
+
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+            for (var i = 0; i < animalsList.length; i++) {
+                var animal = animalsList[i];
+                var row = document.createElement('tr');
+
+                var tid = document.createElement('td');
+                tid.textContent = (i + 1);
+                row.appendChild(tid);
+
+                var tname = document.createElement('td');
+                tname.textContent = animal.common_name;
+                row.appendChild(tname);
+
+                var tbreed = document.createElement('td');
+                tbreed.textContent = animal.breed;
+                row.appendChild(tbreed);
+
+                var tsize = document.createElement('td');
+                tsize.textContent = animal.size;
+                row.appendChild(tsize);
+
+                var tcount = document.createElement('td');
+                tcount.textContent = animal.count;
+                row.appendChild(tcount);
+
+                var tdesc = document.createElement('td');
+                tdesc.textContent = animal.description;
+                row.appendChild(tdesc);
+
+                tbody.appendChild(row);
+            }
+            console.log(tbody);
+            document.getElementById("animalPopup").style.display = "block";
+        }
+
+        function showPopUp(adoptionCenterName, address, contactNo, imageURL) {
+            document.getElementById("popup-content").innerText = "Contact No : "+contactNo + '\n' +"Address : "+ address;
+            document.getElementById("popup-title").innerText = adoptionCenterName;
+            document.getElementById("popup-image").src = imageURL;
+            document.querySelector(".overlay").style.display = "block";
+            document.querySelector(".popup").style.display = "flex";
+        }
+
+        function closePopup() {
+            document.querySelector(".overlay").style.display = "none";
+            document.querySelector(".popup").style.display = "none";
+        }
+
+        // Render initial animals on page load
+        renderAdoptionCenters(AdoptionCenters);
+    </script>
+</body>
+
+</html>

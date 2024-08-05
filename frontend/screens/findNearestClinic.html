@@ -1,0 +1,181 @@
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title></title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap">
+        <link rel="stylesheet" href="../css/findNearestClinic.css">
+        <link rel="icon" href="../resources/images/productLogo.PNG" type="image/x-icon">
+    </head>
+
+<body>
+    <div class="navbar">
+        <a href="main.html"><i class="fas fa-home"></i> Gentle Guardian</a>
+        <a href="AnimalWellBeing_screen.html" ><i class="fas fa-info-circle"></i> Animal Well-Being</a>
+        <a href="#" class="active"><i class="fas fa-home"></i> Find Clinics</a>
+        <a href="index.html" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <div class="search">
+        <input type="text" id="searchInput" placeholder="Search...">
+        <select class="search-filter" id="searchFilter">
+            <option value="name">Name</option>
+            <option value="city">City</option>
+            <option value="state">State</option>
+        </select>
+        <button id="searchButton">Search</button>
+    </div>
+
+    <!-- Clinic Display Section -->
+    <div id="clinicDisplay">
+        <!-- Dynamically added by JavaScript -->
+    </div>
+
+      <!-- Popup structure -->
+      <div class="overlay" onclick="closePopup()"></div>
+      <div class="popup" style="display: none;">
+          <img id="popup-image" src="#" alt="Clinic Image" width="200" height="200">
+          <div class="popup-details">
+              <h2 id="popup-title">Clinic Name</h2>
+              <p id="popup-content">Clinic Details</p>
+          </div>
+          <button onclick="closePopup()">Close</button>
+      </div>
+      <script>
+        document.getElementById('searchButton').addEventListener('click', searchClinic);
+        function searchClinic() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const searchFilter = document.getElementById('searchFilter').value;
+            var endPoints = `${searchFilter}?${searchFilter}=${searchTerm}`;
+            if(searchTerm.trim()==='') endPoints = ``;
+            // Make an API call using the searchTerm and searchFilter
+            fetch(`http://localhost:3000/routes/pet_clinic/`+endPoints)
+            .then(response => response.json())
+            .then(data => {
+            clinics = data;
+            renderClinic(clinics);
+            })
+            .catch(error => {
+            console.error('Error fetching clinic data:', error);
+            });
+        }
+
+          var clinics = [{
+                clinicId: "",
+                name: "Doggy World",
+                doctorName: "Dr Kavitha Aggrawal",
+                state: "Delhi",
+                city: "Delhi",
+                image: "../resources/images/clinic1.jpg",
+                address: "Plot Number 147 and 148, Rohini Sector 8, Delhi - 110085",
+                contactNo: "07795669312"
+              },
+              {
+                clinicId: "",
+                name: "BTM Vet Clinic",
+                doctorName: "Dr. Bhavik Patel",
+                state: "Karnataka",
+                city: "Bangalore",
+                image: "../resources/images/clinic2.jpg",
+                address: "No 447, 7th Cross 6th Main, BTM Layout 2nd Stage, Bangalore - 560076",
+                contactNo: "09980873522"
+              },
+              {
+                clinicId: "",
+                name: "Shanti Clinic",
+                doctorName: "Dr. Pooja J Thakur",
+                state: "Maharastra",
+                city: "Mumbai",
+                image: "../resources/images/clinic3.jpg",
+                address: "265 Balkrishna Niwas, Laxmi Nappu Road, Matunga East, Mumbai - 400019",
+                contactNo: "09845228977"
+              },
+              {
+                clinicId: "",
+                name: "Pawswell Pet Clinic",
+                doctorName: "Dr. Pashaw",
+                state: "West Bengal",
+                city: "Kolkata",
+                image: "../resources/images/clinic4.jpg",
+                address: "1/2, South City Complex, Prince Golam Mohammad Shah Road, Kolkata, West Bengal - 700095",
+                contactNo: "09606210622"
+              }
+          ];
+
+          function renderClinic(clinicsToRender) {
+            const clinicContainer = document.getElementById('clinicDisplay');
+            clinicContainer.innerHTML = '';
+
+            for (const clinic of clinicsToRender) {
+                // Create the clinic card container
+                const clinicCard = document.createElement('div');
+                clinicCard.className = 'clinic-card';
+
+                // Create and append image to the clinic card
+                const img = document.createElement('img');
+                img.src = clinic.image;
+                img.alt = clinic.name;
+                clinicCard.appendChild(img);
+
+                // Create and append the clinic description container
+                const clinicDescription = document.createElement('div');
+                clinicDescription.className = 'clinic-description';
+                clinicCard.appendChild(clinicDescription);
+
+                // Create and append h3 tag for clinic name
+                const h3 = document.createElement('h3');
+                h3.textContent = clinic.name;
+                clinicDescription.appendChild(h3);
+
+                // Create and append p tag for contact number
+                const p = document.createElement('p');
+                p.textContent = clinic.contactNo;
+                clinicDescription.appendChild(p);
+
+                var city_state = clinic.city;
+                city_state += ", ";
+                city_state += clinic.state;
+                // Create and append p tag for contact number
+                const p2 = document.createElement('p');
+                p2.textContent = city_state;
+                clinicDescription.appendChild(p2);
+
+                // Create and append the sponsor button
+                const sponsorBtn = document.createElement('button');
+                sponsorBtn.textContent = 'View Details';
+                sponsorBtn.className = 'sponsor-btn';
+                sponsorBtn.onclick = function() {
+                    showPopUp(clinic.name, clinic.address, clinic.image, clinic.contactNo, clinic.doctorName);
+                };
+                clinicCard.appendChild(sponsorBtn);
+
+                // Append the clinic card to the main container
+                clinicContainer.appendChild(clinicCard);
+            }
+          }
+
+          function showPopUp(clinicName, address, imageURL, contactNo, doctorName) {
+              document.getElementById("popup-content").innerText = doctorName + '\n' + contactNo + '\n' + address;
+              document.getElementById("popup-title").innerText = clinicName;
+              document.getElementById("popup-image").src = imageURL;
+              document.querySelector(".overlay").style.display = "block";
+              document.querySelector(".popup").style.display = "flex";
+          }
+
+          function closePopup() {
+              document.querySelector(".overlay").style.display = "none";
+              document.querySelector(".popup").style.display = "none";
+          }
+
+          // Render initial zoos on page load
+          renderClinic(clinics);
+      </script>
+</body>
+
+</html>
+
+ 

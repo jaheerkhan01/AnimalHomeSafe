@@ -1,0 +1,148 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #7ae1ac;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    width: 70%;
+    margin: 40px auto;
+}
+
+.banner-image {
+    width: 100%;
+    border-radius: 12px 12px 0 0;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #777;
+    margin-bottom: 25px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.toggle-container {
+    margin: 20px 0;
+}
+
+.btn {
+    background-color: #007BFF;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.btn.primary {
+    margin-right: 10px;
+}
+
+.btn.secondary {
+    background-color: #f3f3f3;
+    color: #333;
+}
+
+.btn.secondary:hover {
+    background-color: #e1e1e1;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.hidden {
+    display: none;
+}
+
+
+/* Toggle Switch Styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;   /* Reduced width */
+    height: 20px;  /* Reduced height */
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 20px;  /* Adjusted for reduced height */
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;   /* Reduced height */
+    width: 16px;    /* Reduced width */
+    left: 2px;      /* Adjusted for reduced size */
+    bottom: 2px;    /* Adjusted for reduced size */
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);  /* Adjusted for reduced width */
+}
+
+.btn {
+    transition: transform 0.2s, box-shadow 0.2s;  /* Button hover animation */
+    margin-right: 10px;  /* Spacing between buttons */
+}
+
+.btn:hover {
+    transform: translateY(-3px);  /* Lift the button a bit on hover */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);  /* Add a shadow for a lifting effect */
+}
+
+.btn:active {
+    transform: translateY(0);  /* Reset button position when clicked */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);  /* Less shadow when button is active (pressed) */
+}
+
+.btn.secondary {
+    background-color: #f3f3f3;
+    color: #333;
+}
+
+.btn.secondary:hover {
+    background-color: #e1e1e1;
+}
